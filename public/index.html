@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time QR Code</title>
+    <script src="https://cdn.socket.io/4.7.1/socket.io.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 90%;
+        max-width: 600px;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+
+      p {
+        color: #555;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+      }
+
+      .qr-container {
+        margin: 20px 0;
+        position: relative;
+      }
+
+      img {
+        width: 100%;
+        max-width: 300px;
+        border-radius: 8px;
+        margin: 10px 0;
+      }
+
+      .images-container {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+      }
+
+      .image-box {
+        max-width: 300px;
+        text-align: center;
+      }
+
+      .image-box img {
+        width: 100%;
+        border-radius: 8px;
+      }
+
+      .image-box p {
+        font-size: 0.9em;
+        color: #888;
+      }
+
+      .button {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Download Your Photo</h1>
+      <p>Scan the QR code below to download your photo:</p>
+
+      <div class="qr-container images-container">
+        <div class="image-box">
+          <h3>QR Code</h3>
+          <img id="qrCode" src="" alt="QR Code" />
+        </div>
+        <div class="image-box">
+          <h3>User's Image</h3>
+          <img id="userImage" src="" alt="User's Image" />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const socket = io("http://localhost:3000"); // Ensure this URL is correct for your app
+
+      socket.on("newQR", (data) => {
+        const qrCodeImage = document.getElementById("qrCode");
+        const userImage = document.getElementById("userImage");
+
+        qrCodeImage.src = data.qrCodeUrl; // Set the QR code image URL
+        userImage.src = data.imagePath; // Set the user's image URL
+
+        console.log(data);
+        console.log("New QR Code received:", data.qrCodeUrl);
+        console.log("User Image received:", data.imageUrl);
+      });
+    </script>
+  </body>
+</html>
